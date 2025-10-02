@@ -1,6 +1,5 @@
 import "dotenv/config";
-import { VoltAgent, VoltOpsClient, Agent, Memory } from "@voltagent/core";
-import { LibSQLMemoryAdapter } from "@voltagent/libsql";
+import { VoltAgent, VoltOpsClient, Agent, Memory, InMemoryStorageAdapter } from "@voltagent/core";
 import { createPinoLogger } from "@voltagent/logger";
 import { openai } from "@ai-sdk/openai";
 import { honoServer } from "@voltagent/server-hono";
@@ -15,9 +14,8 @@ const logger = createPinoLogger({
 
 // Configure persistent memory (LibSQL / SQLite)
 const memory = new Memory({
-  storage: new LibSQLMemoryAdapter({
-    url: "file:./.voltagent/memory.db",
-    logger: logger.child({ component: "libsql" }),
+  storage: new InMemoryStorageAdapter({
+    storageLimit: 50,
   }),
 });
 
